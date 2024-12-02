@@ -1,18 +1,24 @@
 import React, { useState } from 'react';
-import { ShoppingCart, Menu, X } from 'lucide-react';
+import { ShoppingCart, Menu, X, Eye, EyeOff } from 'lucide-react';
+import { useCart } from '../contexts/CartContext';
+import { useConfig } from '../contexts/ConfigContext';
 
 interface NavbarProps {
-  onNavigate: (page: 'home' | 'contact') => void;
-  currentPage: 'home' | 'contact';
+  onNavigate: (page: 'home' | 'contact' | 'cart') => void;
+  currentPage: 'home' | 'contact' | 'cart';
 }
 
 export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { state } = useCart();
+  const { config, togglePriceVisibility } = useConfig();
 
-  const handleNavigate = (page: 'home' | 'contact') => {
+  const handleNavigate = (page: 'home' | 'contact' | 'cart') => {
     onNavigate(page);
     setIsMobileMenuOpen(false);
   };
+
+  const cartItemCount = state.items.reduce((total, item) => total + item.quantity, 0);
 
   return (
     <nav className="bg-green-800 text-white relative">
@@ -44,8 +50,29 @@ export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
               >
                 联系方式
               </button>
-              <button className="p-2 hover:bg-green-700 rounded-full">
+              <button
+                onClick={togglePriceVisibility}
+                className="p-2 hover:bg-green-700 rounded-full"
+                title={config.showPrices ? '隐藏价格' : '显示价格'}
+              >
+                {config.showPrices ? (
+                  <Eye className="h-6 w-6" />
+                ) : (
+                  <EyeOff className="h-6 w-6" />
+                )}
+              </button>
+              <button 
+                onClick={() => handleNavigate('cart')}
+                className={`p-2 hover:bg-green-700 rounded-full relative ${
+                  currentPage === 'cart' ? 'bg-green-700' : ''
+                }`}
+              >
                 <ShoppingCart className="h-6 w-6" />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {cartItemCount}
+                  </span>
+                )}
               </button>
             </div>
           </div>
@@ -83,10 +110,40 @@ export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
           >
             联系方式
           </button>
-          <button className="block w-full text-left px-3 py-2 rounded-md hover:bg-green-700">
+          <button
+            onClick={togglePriceVisibility}
+            className="block w-full text-left px-3 py-2 rounded-md hover:bg-green-700"
+          >
             <div className="flex items-center">
-              <ShoppingCart className="h-6 w-6 mr-2" />
-              购物车
+              {config.showPrices ? (
+                <>
+                  <Eye className="h-6 w-6 mr-2" />
+                  隐藏价格
+                </>
+              ) : (
+                <>
+                  <EyeOff className="h-6 w-6 mr-2" />
+                  显示价格
+                </>
+              )}
+            </div>
+          </button>
+          <button 
+            onClick={() => handleNavigate('cart')}
+            className={`block w-full text-left px-3 py-2 rounded-md ${
+              currentPage === 'cart' ? 'bg-green-700' : 'hover:bg-green-700'
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <ShoppingCart className="h-6 w-6 mr-2" />
+                购物车
+              </div>
+              {cartItemCount > 0 && (
+                <span className="bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartItemCount}
+                </span>
+              )}
             </div>
           </button>
         </div>
