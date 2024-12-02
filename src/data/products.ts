@@ -36,6 +36,14 @@ export const products: Product[] = [
     category: 'tea',
   },
   {
+    id: '2',
+    name: '武夷岩茶1',
+    description: '岩韵浓郁，回甘悠长',
+    price: 368,
+    image: 'https://images.unsplash.com/photo-1597318181409-cf64d0b5d8a2?auto=format&fit=crop&w=800',
+    category: 'tea',
+  },
+  {
     id: '3',
     name: '复古茶叶罐',
     description: '陶瓷材质，密封保鲜',
