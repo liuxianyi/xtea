@@ -5,6 +5,7 @@ import CategorySection from './components/CategorySection';
 import ContactPage from './components/ContactPage';
 import CartPage from './components/CartPage';
 import CategoryPage from './pages/CategoryPage';
+import ProductPage from './pages/ProductPage';
 import { categories, products } from './data/products';
 import { CartProvider } from './contexts/CartContext';
 import { ConfigProvider } from './contexts/ConfigContext';
@@ -60,6 +61,7 @@ function App() {
             <Routes>
               <Route path="/" element={renderMainContent()} />
               <Route path="/category/:categoryId" element={<CategoryPage />} />
+              <Route path="/product/:productId" element={<ProductPage />} />
             </Routes>
 
             {/* Footer */}

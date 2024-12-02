@@ -3,6 +3,7 @@ import { Product } from '../types/product';
 import { useCart } from '../contexts/CartContext';
 import { useConfig } from '../contexts/ConfigContext';
 import { ShoppingCart } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface ProductCardProps {
   product: Product;
@@ -11,13 +12,22 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const { dispatch } = useCart();
   const { config } = useConfig();
+  const navigate = useNavigate();
 
-  const addToCart = () => {
+  const addToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
     dispatch({ type: 'ADD_ITEM', payload: product });
   };
 
+  const handleClick = () => {
+    navigate(`/product/${product.id}`);
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div 
+      className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transition-transform hover:scale-[1.02]"
+      onClick={handleClick}
+    >
       <img 
         src={product.image} 
         alt={product.name}
