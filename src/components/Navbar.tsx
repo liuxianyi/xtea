@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { ShoppingCart, Menu, X, Eye, EyeOff } from 'lucide-react';
+import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
-import { useConfig } from '../contexts/ConfigContext';
 
 interface NavbarProps {
   onNavigate: (page: 'home' | 'contact' | 'cart') => void;
@@ -11,7 +10,6 @@ interface NavbarProps {
 export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { state } = useCart();
-  const { config, togglePriceVisibility } = useConfig();
 
   const handleNavigate = (page: 'home' | 'contact' | 'cart') => {
     onNavigate(page);
@@ -49,17 +47,6 @@ export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
                 }`}
               >
                 联系方式
-              </button>
-              <button
-                onClick={togglePriceVisibility}
-                className="p-2 hover:bg-green-700 rounded-full"
-                title={config.showPrices ? '隐藏价格' : '显示价格'}
-              >
-                {config.showPrices ? (
-                  <Eye className="h-6 w-6" />
-                ) : (
-                  <EyeOff className="h-6 w-6" />
-                )}
               </button>
               <button 
                 onClick={() => handleNavigate('cart')}
@@ -109,24 +96,6 @@ export default function Navbar({ onNavigate, currentPage }: NavbarProps) {
             }`}
           >
             联系方式
-          </button>
-          <button
-            onClick={togglePriceVisibility}
-            className="block w-full text-left px-3 py-2 rounded-md hover:bg-green-700"
-          >
-            <div className="flex items-center">
-              {config.showPrices ? (
-                <>
-                  <Eye className="h-6 w-6 mr-2" />
-                  隐藏价格
-                </>
-              ) : (
-                <>
-                  <EyeOff className="h-6 w-6 mr-2" />
-                  显示价格
-                </>
-              )}
-            </div>
           </button>
           <button 
             onClick={() => handleNavigate('cart')}

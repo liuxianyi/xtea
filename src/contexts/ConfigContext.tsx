@@ -6,7 +6,6 @@ interface ConfigState {
 
 interface ConfigContextType {
   config: ConfigState;
-  togglePriceVisibility: () => void;
 }
 
 const ConfigContext = createContext<ConfigContextType | null>(null);
@@ -31,22 +30,8 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return () => window.removeEventListener('popstate', updatePriceVisibility);
   }, []);
 
-  const togglePriceVisibility = () => {
-    const newShowPrices = !config.showPrices;
-    const url = new URL(window.location.href);
-    
-    if (newShowPrices) {
-      url.searchParams.set('showPrice', 'true');
-    } else {
-      url.searchParams.delete('showPrice');
-    }
-    
-    window.history.pushState({}, '', url);
-    setConfig(prev => ({ ...prev, showPrices: newShowPrices }));
-  };
-
   return (
-    <ConfigContext.Provider value={{ config, togglePriceVisibility }}>
+    <ConfigContext.Provider value={{ config }}>
       {children}
     </ConfigContext.Provider>
   );
