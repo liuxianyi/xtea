@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Product } from '../types/product';
 import ProductCard from './ProductCard';
+import { useNavigate } from 'react-router-dom';
 
 interface CategorySectionProps {
   title: string;
@@ -9,9 +10,28 @@ interface CategorySectionProps {
 }
 
 export default function CategorySection({ title, description, products }: CategorySectionProps) {
-  const [showAll, setShowAll] = useState(false);
-  const displayProducts = showAll ? products : products.slice(0, 2);
+  const [showExpanded, setShowExpanded] = useState(false);
+  const navigate = useNavigate();
+  
   const hasMore = products.length > 2;
+  const hasEvenMore = products.length > 4;
+  
+  const getDisplayProducts = () => {
+    if (!hasMore) return products;
+    if (!showExpanded) return products.slice(0, 2);
+    return products.slice(0, 4);
+  };
+
+  const handleMoreClick = () => {
+    if (hasEvenMore && showExpanded) {
+      // Navigate to category page with all products
+      navigate(`/category/${products[0].category}`, { 
+        state: { products, title, description } 
+      });
+    } else {
+      setShowExpanded(!showExpanded);
+    }
+  };
 
   return (
     <section className="py-12">
@@ -21,17 +41,19 @@ export default function CategorySection({ title, description, products }: Catego
           <p className="mt-4 text-xl text-gray-600">{description}</p>
         </div>
         <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2">
-          {displayProducts.map((product) => (
+          {getDisplayProducts().map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
         {hasMore && (
           <div className="mt-8 text-center">
             <button
-              onClick={() => setShowAll(!showAll)}
+              onClick={handleMoreClick}
               className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-800 hover:bg-green-700 transition-colors"
             >
-              {showAll ? '收起' : `查看更多${title} (${products.length - 2})`}
+              {!showExpanded && `查看更多${title} (${products.length - 2})`}
+              {showExpanded && !hasEvenMore && '收起'}
+              {showExpanded && hasEvenMore && `查看全部${title} (${products.length - 4})`}
             </button>
           </div>
         )}
