@@ -1,9 +1,10 @@
 import React from 'react';
-import { MapPin, Phone, ExternalLink } from 'lucide-react';
+import { MapPin, Phone, MessageSquare, ExternalLink } from 'lucide-react';
 
 export default function ContactPage() {
   const address = "河南省信阳市商城县伏山乡杨桥村居民委员会入口处";
   const phone = "17709886453";
+  const wechat = "LSF17709886453";
   const name = "刘守富";
   
   // 高德地图坐标（需要根据实际地址获取准确坐标）
@@ -34,7 +35,7 @@ export default function ContactPage() {
       <h1 className="text-3xl font-bold text-center mb-12">联系方式</h1>
       
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto">
-        <div className="space-y-6">
+        <div className="space-y-8">
           {/* 联系人 */}
           <div className="flex items-center space-x-4">
             <div className="bg-green-100 p-3 rounded-full">
@@ -48,6 +49,25 @@ export default function ContactPage() {
               >
                 {phone}
               </a>
+            </div>
+          </div>
+
+          {/* 微信 */}
+          <div className="flex items-start space-x-4">
+            <div className="bg-green-100 p-3 rounded-full">
+              <MessageSquare className="h-6 w-6 text-green-800" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold">微信</h3>
+              <p className="text-gray-600 mb-4">{wechat}</p>
+              <div className="bg-white border border-gray-200 rounded-lg p-4 w-48">
+                <img
+                  src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=LSF17709886453"
+                  alt="微信二维码"
+                  className="w-full h-auto"
+                />
+                <p className="text-center text-sm text-gray-500 mt-2">扫码添加微信</p>
+              </div>
             </div>
           </div>
 
